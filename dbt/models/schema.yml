@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: weather_metrics
+    description: >
+      Daily weather enriched with moving averages, temperature anomaly,
+      rolling rainfall and dry spell length.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [latitude, longitude, obs_date]
+      - dbt_utils.expression_is_true:
+          expression: "temp_max >= temp_min"
+    columns:
+      - name: weather_key
+        description: "Surrogate key of latitude + longitude + date"
+        tests:
+          - not_null
+          - unique
+      - name: city
+        tests:
+          - not_null
+      - name: obs_date
+        tests:
+          - not_null
+      - name: precipitation_mm
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: dry_spell_days
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: rain_7d
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0

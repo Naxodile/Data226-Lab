@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  # Table written by the HW3 ETL DAG (USE DATABASE ASSIGNMENTS; default schema of snowflake_conn)
+  - name: weather
+    database: assignments
+    schema: "{{ var('weather_schema', 'public') }}"
+    tables:
+      - name: weather_data   # city, latitude, longitude, date, temp_max, temp_min, precipitation, weather_code
